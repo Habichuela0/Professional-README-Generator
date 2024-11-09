@@ -3,7 +3,6 @@ import inquirer from 'inquirer';
 import fs from 'fs';
 import path from 'path';
 
-
 //Licenses
 const LICENSE_INFO = {
     'MIT': {
@@ -31,43 +30,56 @@ const LICENSE_INFO = {
 //Collecting user input
 const questions = [
     {
-        type:'input',
-        name: 'projectDescription',
-        message: 'Please provide a description of your project',
-        validate: projectDescriptionInput => {
-            if (projectDescriptionInput) {
-                return true
-            } else {
-                console.log('You must enter a project decription')
-                return false
-            }
-        }
-       
-    }, 
-    {
         type: 'input',
         name: 'projectName',
         message: 'What is the name of your project?',
         validate: projectNameInput => {
             if (projectNameInput) {
-                return true
+                return true;
             } else {
-                console.log('You must enter a project name')
-                return false
+                console.log('You must enter a project name');
+                return false;
             }
         }
     },
-       { type: 'input',
+    {
+        type:'input',
+        name: 'projectDescription',
+        message: 'Please provide a description of your project',
+        validate: projectDescriptionInput => {
+            if (projectDescriptionInput) {
+                return true;
+            } else {
+                console.log('You must enter a project description');
+                return false;
+            }
+        }
+    },
+    {
+        type: 'input',
         name: 'username',
         message: 'Please provide your GitHub username',
         validate: usernameInput => {
             if (usernameInput) {
-                return true
+                return true;
             } else {
-                console.log('You must enter a GitHub username')
-                return false
+                console.log('You must enter a GitHub username');
+                return false;
             }
-        } 
+        }
+    },
+    {
+        type: 'input',
+        name: 'email',
+        message: 'Please provide your email address',
+        validate: emailInput => {
+            if (emailInput) {
+                return true;
+            } else {
+                console.log('Please enter your email address');
+                return false;
+            }
+        }
     },
     {
         type: 'input',
@@ -75,28 +87,39 @@ const questions = [
         message: 'What are the installation instructions?',
         default: 'npm install'
     },
-
-    { type: 'input',
-    name: 'email',
-    message: 'Please provide your email address',
-    validate: emailInput => {
-        if (emailInput) {
-            return true
-        } else {
-            console.log('Please enter your email address')
-            return false
+    {
+        type: 'input',
+        name: 'usage',
+        message: 'How do you use this project?',
+        validate: usageInput => {
+            if (usageInput) {
+                return true;
+            } else {
+                console.log('Please provide usage information');
+                return false;
+            }
         }
-    }
-
     },
-
+    {
+        type: 'input',
+        name: 'contribution',
+        message: 'How can others contribute to this project?',
+        default: 'Contributions are welcome. Please fork the repository and submit a pull request.'
+    },
+    {
+        type: 'input',
+        name: 'tests',
+        message: 'What commands should be run to run tests?',
+        default: 'npm test'
+    },
     {
         type: 'list',
         name: 'license',
         message: 'Choose a license for your project:',
         choices: Object.keys(LICENSE_INFO)
-    },                                                                                                          
-]
+    }
+];
+
 // function to generate README content
 function generateReadme(answers) {
     const licenseBadge = LICENSE_INFO[answers.license].badge;
@@ -115,6 +138,7 @@ ${answers.projectDescription}
 - [License](#license)
 - [Contributing](#contributing)
 - [Tests](#tests)
+- [Questions](#questions)
 
 ## Installation
 ${answers.installation}
@@ -131,6 +155,9 @@ ${answers.contribution}
 ## Tests
 ${answers.tests}
 
+## Questions
+For questions about this project, please contact me at ${answers.email}.
+You can find more of my work at [${answers.username}](https://github.com/${answers.username}).
 `;
 }
 
@@ -159,7 +186,8 @@ async function init() {
         await writeToFile('README.md', readmeContent);
     } catch (err) {
         console.error('Error generating README:', err);
-    }}
+    }
+}
 
-    //start app
-    init();
+//start app
+init();
